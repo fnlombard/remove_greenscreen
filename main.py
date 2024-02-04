@@ -76,9 +76,15 @@ def remove_screen(image: Matt) -> Matt:
     )
 
     # stretch so that 255 -> 255 and 127.5 -> 0
-    mask = skimage.exposure.rescale_intensity(
-        blur, in_range=(127.5, 255), out_range=(0, 255)
-    ).astype(np.uint8)
+    blur_clipped = np.clip(blur, 127.5, 255).astype(np.uint8)
+    mask = cv2.normalize(
+        blur_clipped,
+        None,
+        alpha=0,
+        beta=255,
+        norm_type=cv2.NORM_MINMAX,
+        dtype=cv2.CV_8U,
+    )
 
     # add mask to image as alpha channel
     result = img.copy()
