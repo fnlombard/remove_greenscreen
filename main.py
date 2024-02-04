@@ -58,11 +58,8 @@ def load_video(input_file: Path) -> Video:
 
 
 def remove_screen(image: Matt) -> Matt:
-    # load image
-    img = cv2.imread("greenscreen.jpg")
-
     # convert to LAB
-    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 
     # extract A channel
     A = lab[:, :, 1]
@@ -87,8 +84,8 @@ def remove_screen(image: Matt) -> Matt:
     )
 
     # add mask to image as alpha channel
-    result = img.copy()
-    result = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+    result = image.copy()
+    result = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
     result[:, :, 3] = mask
 
     # save output
